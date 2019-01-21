@@ -49,7 +49,21 @@ class MyApi < Grape::API
 
       # Use `paginate` helper to execute kaminari methods
       # with arguments automatically passed from params
-      paginate(posts)
+      # RESULT
+      # {
+      #    posts: [item, item, item, item],
+      #    pagination: {
+      #      'X-Total': data.total_count.to_s,
+      #      'X-Total-Pages': data.total_pages.to_s,
+      #      'X-Per-Page': data.limit_value.to_s,
+      #     'X-Page': data.current_page.to_s,
+      #      'X-Next-Page': data.next_page.to_s,
+      #      'X-Prev-Page': data.prev_page.to_s,
+      #      'X-Offset': params[:offset].to_s
+      #    }
+      #  }
+      pagination  = paginate(posts)
+      {posts: posts}.merge!(pagination)
     end
 
     get do
@@ -71,18 +85,6 @@ Now you can make a HTTP request to your endpoint with the following parameters
 
 ```
 curl -v http://host.dev/api/posts?page=3&offset=10
-```
-
-and the response will be paginated and also will include pagination headers
-
-```
-X-Total: 42
-X-Total-Pages: 5
-X-Page: 3
-X-Per-Page: 10
-X-Next-Page: 4
-X-Prev-Page: 2
-X-Offset: 10
 ```
 
 ## Contributing
