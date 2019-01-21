@@ -9,19 +9,20 @@ module Grape
       base.class_eval do
         helpers do
           def paginate(collection)
-            collection.page(params[:page].to_i).per(params[:per_page].to_i).padding(params[:offset].to_i).tap do |data|
-              return {
-                       'pagination': {
-                          'X-Total': data.total_count.to_s,
-                          'X-Total-Pages': data.total_pages.to_s,
-                          'X-Per-Page': data.limit_value.to_s,
-                          'X-Page': data.current_page.to_s,
-                          'X-Next-Page': data.next_page.to_s,
-                          'X-Prev-Page': data.prev_page.to_s,
-                          'X-Offset': params[:offset].to_s
-                        }
-                    }
-            end
+            page_collection = collection.page(params[:page].to_i).per(params[:per_page].to_i).padding(params[:offset].to_i)
+            # page_collection.tap do |data|
+              return [page_collection, {
+                'pagination': {
+                  'X-Total': page_collection.total_count.to_s,
+                  'X-Total-Pages': page_collection.total_pages.to_s,
+                  'X-Per-Page': page_collection.limit_value.to_s,
+                  'X-Page': page_collection.current_page.to_s,
+                  'X-Next-Page': page_collection.next_page.to_s,
+                  'X-Prev-Page': page_collection.prev_page.to_s,
+                  'X-Offset': params[:offset].to_s
+                 }
+             }]
+            # end
           end
         end
 
