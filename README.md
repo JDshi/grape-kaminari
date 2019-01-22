@@ -49,6 +49,8 @@ class MyApi < Grape::API
 
       # Use `paginate` helper to execute kaminari methods
       # with arguments automatically passed from params
+      posts, pagination  = paginate(posts)
+      {posts: posts}.merge!(pagination)
       # RESULT
       # {
       #    posts: [item, item, item, item],
@@ -62,8 +64,6 @@ class MyApi < Grape::API
       #      'X-Offset': params[:offset].to_s
       #    }
       #  }
-      posts, pagination  = paginate(posts)
-      {posts: posts}.merge!(pagination)
     end
 
     get do
