@@ -56,13 +56,13 @@ class MyApi < Grape::API
       #      'X-Total': data.total_count.to_s,
       #      'X-Total-Pages': data.total_pages.to_s,
       #      'X-Per-Page': data.limit_value.to_s,
-      #     'X-Page': data.current_page.to_s,
+      #      'X-Page': data.current_page.to_s,
       #      'X-Next-Page': data.next_page.to_s,
       #      'X-Prev-Page': data.prev_page.to_s,
       #      'X-Offset': params[:offset].to_s
       #    }
       #  }
-      pagination  = paginate(posts)
+      posts, pagination  = paginate(posts)
       {posts: posts}.merge!(pagination)
     end
 
